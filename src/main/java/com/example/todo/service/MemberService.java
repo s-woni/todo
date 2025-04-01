@@ -1,5 +1,6 @@
 package com.example.todo.service;
 
+import com.example.todo.dto.LoginResponseDto;
 import com.example.todo.dto.MemberResponseDto;
 import com.example.todo.dto.SignUpResponseDto;
 import com.example.todo.entity.Member;
@@ -69,5 +70,17 @@ public class MemberService {
         }
 
         findMember.updateUserName(newName);
+    }
+
+    public LoginResponseDto login(String email, String password) {
+
+        Member findMember = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "존재하지 않는 아이디" + email));
+
+        if (!findMember.getPassword().equals(password)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "잘못된 비밀번호 : " + email);
+        }
+
+        return new LoginResponseDto(findMember.getId(), findMember.getUsername(), findMember.getEmail());
     }
 }

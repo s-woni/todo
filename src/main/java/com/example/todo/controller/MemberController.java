@@ -1,7 +1,11 @@
 package com.example.todo.controller;
 
+import com.example.todo.common.Const;
 import com.example.todo.dto.*;
 import com.example.todo.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +26,18 @@ public class MemberController {
         return new ResponseEntity<>(signUpResponseDto, HttpStatus.CREATED);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDto> login(@RequestBody @Valid LoginRequestDto requestDto,
+                                                  HttpServletRequest servletRequest) {
+
+        LoginResponseDto responseDto = memberService.login(requestDto.getEmail(), requestDto.getPassword());
+
+        HttpSession session = servletRequest.getSession();
+        session.setAttribute(Const.LOGIN_USER, responseDto);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<MemberResponseDto> findById(@PathVariable Long id) {
 
@@ -38,7 +54,7 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PatchMapping("/name/{id}")
+    @PatchMapping("/{id}/name")
     public ResponseEntity<Void> updateUserName(@PathVariable Long id, @RequestBody UpdateUserNameRequest requestDto) {
 
         memberService.updateUserName(id, requestDto.getNewName(), requestDto.getPassword());
