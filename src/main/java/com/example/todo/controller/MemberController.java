@@ -1,9 +1,6 @@
 package com.example.todo.controller;
 
-import com.example.todo.dto.MemberResponseDto;
-import com.example.todo.dto.SignUpRequestDto;
-import com.example.todo.dto.SignUpResponseDto;
-import com.example.todo.dto.UpdatePasswordRequest;
+import com.example.todo.dto.*;
 import com.example.todo.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,6 +34,14 @@ public class MemberController {
     public ResponseEntity<Void> updatePasword(@PathVariable Long id, @RequestBody UpdatePasswordRequest requestDto) {
 
         memberService.updatePassword(id, requestDto.getOldPassword(), requestDto.getNewPassword());
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/name/{id}")
+    public ResponseEntity<Void> updateUserName(@PathVariable Long id, @RequestBody UpdateUserNameRequest requestDto) {
+
+        memberService.updateUserName(id, requestDto.getNewName(), requestDto.getPassword());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

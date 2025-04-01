@@ -46,7 +46,7 @@ public class MemberService {
         Member findMember = memberRepository.findByIdOrElseThrow(id);
 
         if (!findMember.getPassword().equals(oldPassword)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 id : " + id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "잘못된 비밀번호 : " + id);
         }
 
         findMember.updatePassword(newPassword);
@@ -57,5 +57,17 @@ public class MemberService {
         Member findMember = memberRepository.findByIdOrElseThrow(id);
 
         memberRepository.delete(findMember);
+    }
+
+    @Transactional
+    public void updateUserName(Long id, String newName, String password) {
+
+        Member findMember = memberRepository.findByIdOrElseThrow(id);
+
+        if (!findMember.getPassword().equals(password)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "잘못된 비밀번호 : " + id);
+        }
+
+        findMember.updateUserName(newName);
     }
 }
