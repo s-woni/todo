@@ -35,11 +35,12 @@ public class MemberController {
         Long userId = responseDto.getId();
 
         if (userId == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         HttpSession session = servletRequest.getSession();
         session.setAttribute(Const.LOGIN_USER, responseDto);
+        session.setAttribute("sessionKey", responseDto.getId());
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
