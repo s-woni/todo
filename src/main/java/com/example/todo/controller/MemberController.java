@@ -57,7 +57,19 @@ public class MemberController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MemberResponseDto> findById(@PathVariable Long id) {
+    public ResponseEntity<MemberResponseDto> findById(@PathVariable Long id, HttpServletRequest servletRequest) {
+
+        HttpSession session = servletRequest.getSession(false);
+        if (session == null || session.getAttribute(Const.LOGIN_USER) == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        LoginResponseDto loginResponseDto = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
+        Long userId = loginResponseDto.getId();
+
+        if (!userId.equals(id)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
 
         MemberResponseDto memberResponseDto = memberService.findById(id);
 
