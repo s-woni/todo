@@ -47,4 +47,12 @@ public class ScheduleService {
 
         return new ScheduleResponseDto(schedule.getId(), schedule.getTitle(), schedule.getContents());
     }
+
+    public void deleteByUserIdAndScheduleId(Long userId, Long scheduleId) {
+
+        Schedule schedule = scheduleRepository.findByMemberIdAndId(userId, scheduleId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "일정이 없습니다."));
+
+        scheduleRepository.delete(schedule);
+    }
 }
