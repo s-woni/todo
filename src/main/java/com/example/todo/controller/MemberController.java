@@ -77,7 +77,7 @@ public class MemberController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updatePasword(@PathVariable Long id, @RequestBody UpdatePasswordRequest requestDto) {
+    public ResponseEntity<Void> updatePasword(@PathVariable Long id, @RequestBody UpdatePasswordRequestDto requestDto) {
 
         memberService.updatePassword(id, requestDto.getOldPassword(), requestDto.getNewPassword());
 
@@ -85,7 +85,7 @@ public class MemberController {
     }
 
     @PatchMapping("/{id}/name")
-    public ResponseEntity<Void> updateUserName(@PathVariable Long id, @RequestBody UpdateUserNameRequest requestDto) {
+    public ResponseEntity<Void> updateUserName(@PathVariable Long id, @RequestBody UpdateUserNameRequestDto requestDto) {
 
         memberService.updateUserName(id, requestDto.getNewName(), requestDto.getPassword());
 
