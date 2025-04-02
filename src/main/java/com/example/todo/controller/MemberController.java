@@ -32,10 +32,27 @@ public class MemberController {
 
         LoginResponseDto responseDto = memberService.login(requestDto.getEmail(), requestDto.getPassword());
 
+        Long userId = responseDto.getId();
+
+        if (userId == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
         HttpSession session = servletRequest.getSession();
         session.setAttribute(Const.LOGIN_USER, responseDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletRequest servletRequest) {
+        HttpSession session = servletRequest.getSession(false);
+
+        if (session != null) {
+            session.invalidate();
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
