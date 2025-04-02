@@ -1,5 +1,6 @@
 package com.example.todo.service;
 
+import com.example.todo.config.PasswordEncoder;
 import com.example.todo.dto.LoginResponseDto;
 import com.example.todo.dto.MemberResponseDto;
 import com.example.todo.dto.SignUpResponseDto;
@@ -18,10 +19,13 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public SignUpResponseDto signUp(String username, String password, String email) {
 
-        Member member = new Member(username, password, email);
+        String encodePassword = passwordEncoder.encode(password);
+
+        Member member = new Member(username, encodePassword, email);
 
         Member savedMember = memberRepository.save(member);
 
@@ -48,7 +52,9 @@ public class MemberService {
 
         checkedPassword(findMember, oldPassword);
 
-        findMember.updatePassword(newPassword);
+        String encodePassword = passwordEncoder.encode(newPassword);
+
+        findMember.updatePassword(encodePassword);
     }
 
     public void delete(Long id, String password) {
@@ -84,7 +90,7 @@ public class MemberService {
 
         String memberPassword = member.getPassword();
 
-        if (!memberPassword.equals(password)) {
+        if (!passwordEncoder.matches(password, memberPassword)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "잘못된 비밀번호");
         }
     }
