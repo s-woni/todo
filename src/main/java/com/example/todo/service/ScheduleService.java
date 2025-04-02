@@ -6,7 +6,9 @@ import com.example.todo.entity.Schedule;
 import com.example.todo.repository.MemberRepository;
 import com.example.todo.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,5 +38,13 @@ public class ScheduleService {
         List<Schedule> schedules = scheduleRepository.findByMemberId(userId);
 
         return schedules.stream().map(ScheduleResponseDto::toDto).collect(Collectors.toList());
+    }
+
+    public ScheduleResponseDto findByMemberIdAndScheduleId(Long userId, Long scheduleId) {
+
+        Schedule schedule = scheduleRepository.findByMemberIdAndId(userId, scheduleId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "일정이 없습니다."));
+
+        return new ScheduleResponseDto(schedule.getId(), schedule.getTitle(), schedule.getContents());
     }
 }

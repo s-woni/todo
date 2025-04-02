@@ -33,10 +33,18 @@ public class ScheduleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<ScheduleResponseDto>> findAllbyUserId(@PathVariable Long id) {
+    public ResponseEntity<List<ScheduleResponseDto>> findAllByUserId(@PathVariable Long id) {
 
         List<ScheduleResponseDto> scheduleResponseDtoList = scheduleService.findByMemberId(id);
 
         return new ResponseEntity<>(scheduleResponseDtoList, HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/{scheduleId}")
+    public ResponseEntity<ScheduleResponseDto> findOneByUserId(@PathVariable Long userId, @PathVariable Long scheduleId) {
+
+        ScheduleResponseDto scheduleResponseDto = scheduleService.findByMemberIdAndScheduleId(userId, scheduleId);
+
+        return new ResponseEntity<>(scheduleResponseDto, HttpStatus.OK);
     }
 }
