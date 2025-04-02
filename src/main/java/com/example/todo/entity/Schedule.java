@@ -1,7 +1,9 @@
 package com.example.todo.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "schedule")
 public class Schedule extends BaseEntity {
@@ -19,5 +21,16 @@ public class Schedule extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    public Schedule() {
 
+    }
+
+    public Schedule(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
 }
