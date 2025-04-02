@@ -6,9 +6,7 @@ import com.example.todo.entity.Schedule;
 import com.example.todo.repository.MemberRepository;
 import com.example.todo.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -19,11 +17,7 @@ public class ScheduleService {
     private final MemberRepository memberRepository;
     private final ScheduleRepository scheduleRepository;
 
-    public ScheduleResponseDto save(String title, String contents, String username, Long userId, Long loggedUserId) {
-
-        if(!loggedUserId.equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "잘못된 사용자의 요청");
-        }
+    public ScheduleResponseDto save(String title, String contents, String username, Long userId) {
 
         Member findMember = memberRepository.findByIdOrElseThrow(userId);
 
