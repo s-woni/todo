@@ -6,6 +6,7 @@ import com.example.todo.dto.MemberResponseDto;
 import com.example.todo.dto.SignUpResponseDto;
 import com.example.todo.entity.Member;
 import com.example.todo.repository.MemberRepository;
+import com.example.todo.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final ScheduleRepository scheduleRepository;
     private final PasswordEncoder passwordEncoder;
 
     public SignUpResponseDto signUp(String username, String password, String email) {
@@ -63,7 +65,7 @@ public class MemberService {
 
         checkedPassword(findMember, password);
 
-        memberRepository.delete(findMember);
+        memberRepository.deleteById(id);
     }
 
     @Transactional

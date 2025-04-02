@@ -3,6 +3,9 @@ package com.example.todo.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Entity
 @Table(name = "member")
@@ -21,6 +24,9 @@ public class Member extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Schedule> schedules = new ArrayList<>();
+
     public Member() {
     }
 
@@ -36,5 +42,10 @@ public class Member extends BaseEntity {
 
     public void updateUserName(String name) {
         this.username = name;
+    }
+
+    public void removeSchedule(Schedule schedule) {
+        schedules.remove(schedule);
+        schedule.setMember(null);
     }
 }
