@@ -46,16 +46,16 @@ public class MemberService {
 
         Member findMember = memberRepository.findByIdOrElseThrow(id);
 
-        if (!findMember.getPassword().equals(oldPassword)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "잘못된 비밀번호 : " + id);
-        }
+        checkedPassword(findMember, oldPassword);
 
         findMember.updatePassword(newPassword);
     }
 
-    public void delete(Long id) {
+    public void delete(Long id, String password) {
 
         Member findMember = memberRepository.findByIdOrElseThrow(id);
+
+        checkedPassword(findMember, password);
 
         memberRepository.delete(findMember);
     }
@@ -65,9 +65,7 @@ public class MemberService {
 
         Member findMember = memberRepository.findByIdOrElseThrow(id);
 
-        if (!findMember.getPassword().equals(password)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "잘못된 비밀번호 : " + id);
-        }
+        checkedPassword(findMember, password);
 
         findMember.updateUserName(newName);
     }
@@ -77,10 +75,17 @@ public class MemberService {
         Member findMember = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "존재하지 않는 아이디" + email));
 
-        if (!findMember.getPassword().equals(password)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "잘못된 비밀번호 : " + email);
-        }
+        checkedPassword(findMember, password);
 
         return new LoginResponseDto(findMember.getId(), findMember.getUsername(), findMember.getEmail());
+    }
+
+    public void checkedPassword(Member member, String password) {
+
+        String memberPassword = member.getPassword();
+
+        if (!memberPassword.equals(password)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "잘못된 비밀번호");
+        }
     }
 }
