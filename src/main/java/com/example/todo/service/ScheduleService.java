@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +31,10 @@ public class ScheduleService {
         return new ScheduleResponseDto(savedSchedule.getId(), savedSchedule.getTitle(), savedSchedule.getContents());
     }
 
-    public List<ScheduleResponseDto> findAll() {
+    public List<ScheduleResponseDto> findByMemberId(Long userId) {
 
-        return scheduleRepository.findAll().stream().map(ScheduleResponseDto::toDto).toList();
+        List<Schedule> schedules = scheduleRepository.findByMemberId(userId);
+
+        return schedules.stream().map(ScheduleResponseDto::toDto).collect(Collectors.toList());
     }
 }
