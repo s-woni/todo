@@ -10,15 +10,18 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+// 공통 엔티티 속성 정의
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
+    // 생성 시간
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createAt;
 
+    // 수정 시간
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 }

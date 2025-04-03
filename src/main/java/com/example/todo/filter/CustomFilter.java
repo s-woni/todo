@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 
+// 요청을 가로채 사전 처리
 public class CustomFilter implements Filter {
 
     @Override

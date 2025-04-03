@@ -26,6 +26,7 @@ public class ScheduleController {
     private final MemberService memberService;
     private final ScheduleService scheduleService;
 
+    // 일정 생성
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> save(@Valid @RequestBody ScheduleRequestDto requestDto, HttpServletRequest servletRequest) {
 
@@ -36,6 +37,7 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleResponseDto, HttpStatus.CREATED);
     }
 
+    // 모든 일정 조회
     @GetMapping
     public ResponseEntity<Page<ScheduleResponseDto>> findAll(@PageableDefault(size = 10, sort = "modifiedAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
@@ -44,6 +46,7 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleResponseDtoList, HttpStatus.OK);
     }
 
+    // 특정 유저 일정 조회
     @GetMapping("/{id}")
     public ResponseEntity<Page<ScheduleResponseDto>> findAllByUserId(@PathVariable Long id, @PageableDefault(size = 10, sort = "modifiedAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
@@ -52,6 +55,7 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleResponseDtoList, HttpStatus.OK);
     }
 
+    // 특정 유저의 특정 일정 조회
     @GetMapping("/{userId}/{scheduleId}")
     public ResponseEntity<ScheduleResponseDto> findOneByUserId(@PathVariable Long userId, @PathVariable Long scheduleId) {
 
@@ -60,6 +64,7 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleResponseDto, HttpStatus.OK);
     }
 
+    // 일정 수정
     @PatchMapping("/{userId}/{scheduleId}")
     public ResponseEntity<Void> updateSchedule(@PathVariable Long userId, @PathVariable Long scheduleId, @Valid  @RequestBody UpdateScheduleRequestDto requestDto) {
 
@@ -68,6 +73,7 @@ public class ScheduleController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // 일정 삭제
     @DeleteMapping("/{userId}/{scheduleId}")
     public ResponseEntity<Void> deleteOneByUserId(@PathVariable Long userId, @PathVariable Long scheduleId) {
 

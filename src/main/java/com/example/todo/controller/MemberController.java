@@ -18,6 +18,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<SignUpResponseDto> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
 
@@ -26,6 +27,7 @@ public class MemberController {
         return new ResponseEntity<>(signUpResponseDto, HttpStatus.CREATED);
     }
 
+    // 로그인
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto requestDto,
                                                   HttpServletRequest servletRequest) {
@@ -38,6 +40,7 @@ public class MemberController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
+        // 세션 생성 & 사용자 정보 저장
         HttpSession session = servletRequest.getSession();
         session.setAttribute(Const.LOGIN_USER, responseDto);
         session.setAttribute("sessionKey", responseDto.getId());
@@ -45,6 +48,7 @@ public class MemberController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
+    // 로그아웃
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest servletRequest) {
         HttpSession session = servletRequest.getSession(false);
@@ -56,6 +60,7 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // 유저 정보 조회
     @GetMapping("/{id}")
     public ResponseEntity<MemberResponseDto> findById(@PathVariable Long id, HttpServletRequest servletRequest) {
 
@@ -76,6 +81,7 @@ public class MemberController {
         return new ResponseEntity<>(memberResponseDto, HttpStatus.OK);
     }
 
+    // 비밀번호 변경
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updatePasword(@PathVariable Long id, @Valid @RequestBody UpdatePasswordRequestDto requestDto) {
 
@@ -84,6 +90,7 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // 유저 이름 변경
     @PatchMapping("/{id}/name")
     public ResponseEntity<Void> updateUserName(@PathVariable Long id, @Valid @RequestBody UpdateUserNameRequestDto requestDto) {
 
@@ -92,6 +99,7 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // 유저 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMember(@PathVariable Long id, @Valid @RequestBody DeleteMemberRequestDto requestDto) {
 

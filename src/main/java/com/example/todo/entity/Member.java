@@ -11,19 +11,24 @@ import java.util.List;
 @Table(name = "member")
 public class Member extends BaseEntity {
 
+    // 고유 id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 유저 이름
     @Column(nullable = false)
     private String username;
 
+    // 비밀번호
     @Column(nullable = false)
     private String password;
 
+    // 이메일
     @Column(nullable = false, unique = true)
     private String email;
 
+    // 일정과 연결
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedules = new ArrayList<>();
 

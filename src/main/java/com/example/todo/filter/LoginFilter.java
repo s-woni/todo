@@ -13,6 +13,7 @@ import java.util.Map;
 
 public class LoginFilter implements Filter {
 
+    // 로그인 없이 접근 가능한 화이트 리스ㅡ트
     private static final String[] WHITE_LIST = {"/", "/members/login", "/members/signup", "/members/logout"};
 
     @Override
@@ -23,24 +24,28 @@ public class LoginFilter implements Filter {
 
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
 
+        // 화이트 리스트에 없을 경우 검증
         if (!isWhiteList(requestURI)) {
 
             HttpSession session = httpRequest.getSession(false);
 
+            // 세션 정보가 없으면 에러
             if (session == null || session.getAttribute("sessionKey") == null) {
-                // throw new RuntimeException("로그인 해주세요");
                 sendUnauthorizedResponse(httpResponse);
                 return;
             }
         }
 
+        // 다음 필터로 
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
+    // 화이트 리스트에 포함되는지 검증
     private boolean isWhiteList(String requestURI) {
         return PatternMatchUtils.simpleMatch(WHITE_LIST, requestURI);
     }
 
+    // 인증되지 않은 요청에 401 반환
     private void sendUnauthorizedResponse(HttpServletResponse servletResponse) throws IOException {
         servletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         servletResponse.setContentType("application/json");

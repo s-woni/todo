@@ -9,17 +9,21 @@ import lombok.Getter;
 @Table(name = "comment")
 public class Comment extends BaseEntity {
 
+    // 고유 id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 댓글 내용
     @NotBlank(message = "댓글 내용이 비어있습니다")
     private String comments;
 
+    // 멤버와 연결
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
+    // 일정과 연결
     @ManyToOne
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
