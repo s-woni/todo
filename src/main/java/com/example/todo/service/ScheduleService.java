@@ -6,13 +6,12 @@ import com.example.todo.entity.Schedule;
 import com.example.todo.repository.MemberRepository;
 import com.example.todo.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,18 +33,18 @@ public class ScheduleService {
         return new ScheduleResponseDto(savedSchedule.getId(), savedSchedule.getTitle(), savedSchedule.getContents(), savedSchedule.getMember().getUsername());
     }
 
-    public List<ScheduleResponseDto> findAll() {
+    public Page<ScheduleResponseDto> findAll(Pageable pageable) {
 
-        List<Schedule> schedules = scheduleRepository.findAll();
+        Page<Schedule> schedules = scheduleRepository.findAll(pageable);
 
-        return schedules.stream().map(ScheduleResponseDto::toDto).collect(Collectors.toList());
+        return scheduleRepository.findAll(pageable).map(ScheduleResponseDto::toDto);
     }
 
-    public List<ScheduleResponseDto> findByMemberId(Long userId) {
+    public Page<ScheduleResponseDto> findByMemberId(Long userId, Pageable pageable) {
 
-        List<Schedule> schedules = scheduleRepository.findByMemberId(userId);
+        Page<Schedule> schedules = scheduleRepository.findByMemberId(userId, pageable);
 
-        return schedules.stream().map(ScheduleResponseDto::toDto).collect(Collectors.toList());
+        return scheduleRepository.findByMemberId(userId, pageable).map(ScheduleResponseDto::toDto);
     }
 
     public ScheduleResponseDto findByMemberIdAndScheduleId(Long userId, Long scheduleId) {

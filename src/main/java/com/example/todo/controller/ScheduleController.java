@@ -9,11 +9,13 @@ import com.example.todo.service.MemberService;
 import com.example.todo.service.ScheduleService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/schedules")
@@ -34,17 +36,17 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDto>> findAll() {
+    public ResponseEntity<Page<ScheduleResponseDto>> findAll(@PageableDefault(size = 10, sort = "modifiedAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        List<ScheduleResponseDto> scheduleResponseDtoList = scheduleService.findAll();
+        Page<ScheduleResponseDto> scheduleResponseDtoList = scheduleService.findAll(pageable);
 
         return new ResponseEntity<>(scheduleResponseDtoList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<ScheduleResponseDto>> findAllByUserId(@PathVariable Long id) {
+    public ResponseEntity<Page<ScheduleResponseDto>> findAllByUserId(@PathVariable Long id, @PageableDefault(size = 10, sort = "modifiedAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        List<ScheduleResponseDto> scheduleResponseDtoList = scheduleService.findByMemberId(id);
+        Page<ScheduleResponseDto> scheduleResponseDtoList = scheduleService.findByMemberId(id,pageable);
 
         return new ResponseEntity<>(scheduleResponseDtoList, HttpStatus.OK);
     }
