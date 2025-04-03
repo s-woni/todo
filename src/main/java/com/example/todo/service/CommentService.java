@@ -59,4 +59,16 @@ public class CommentService {
 
         comment.updateComment(newComment);
     }
+
+    public void deleteComment(Long userId, Long scheduleId, Long commentId) {
+
+        Comment comment = commentRepository.findByScheduleIdAndId(scheduleId, commentId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "댓글이 없습니다."));
+
+        if (!comment.getMember().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인이 작성한 댓글이 아닙니다");
+        }
+
+        commentRepository.delete(comment);
+    }
 }
