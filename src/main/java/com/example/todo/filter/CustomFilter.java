@@ -1,4 +1,4 @@
-package com.example.todo.Filter;
+package com.example.todo.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

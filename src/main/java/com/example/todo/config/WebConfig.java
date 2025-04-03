@@ -1,7 +1,7 @@
 package com.example.todo.config;
 
-import com.example.todo.Filter.CustomFilter;
-import com.example.todo.Filter.LoginFilter;
+import com.example.todo.filter.CustomFilter;
+import com.example.todo.filter.LoginFilter;
 import jakarta.servlet.Filter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

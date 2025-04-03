@@ -1,4 +1,4 @@
-package com.example.todo.Filter;
+package com.example.todo.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.*;
