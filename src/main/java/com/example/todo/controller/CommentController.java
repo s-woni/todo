@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("{scheduleId}/comments")
 @RequiredArgsConstructor
@@ -31,5 +33,13 @@ public class CommentController {
         CommentResponseDto commentResponseDto = commentService.save(requestDto.getComment(), requestDto.getUsername(), loggedUser.getId(), scheduleId);
 
         return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CommentResponseDto>> findAll(@PathVariable Long scheduleId) {
+
+        List<CommentResponseDto> commentResponseDtoList = commentService.findByScheduleId(scheduleId);
+
+        return new ResponseEntity<>(commentResponseDtoList, HttpStatus.OK);
     }
 }

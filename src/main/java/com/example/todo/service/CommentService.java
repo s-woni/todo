@@ -10,6 +10,9 @@ import com.example.todo.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -19,6 +22,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     public CommentResponseDto save(String comments, String username, Long id, Long scheduleId) {
+
         Member findMember = memberRepository.findByIdOrElseThrow(id);
         Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
 
@@ -31,5 +35,12 @@ public class CommentService {
         Comment savedComment = commentRepository.save(comment);
 
         return new CommentResponseDto(savedComment.getId(), savedComment.getComments(), writer);
+    }
+
+    public List<CommentResponseDto> findByScheduleId(Long scheduleId) {
+
+        List<Comment> comments = commentRepository.findByScheduleId(scheduleId);
+
+        return comments.stream().map(CommentResponseDto::toDto).collect(Collectors.toList());
     }
 }
