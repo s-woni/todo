@@ -33,6 +33,14 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleResponseDto, HttpStatus.CREATED);
     }
 
+    @GetMapping
+    public ResponseEntity<List<ScheduleResponseDto>> findAll() {
+
+        List<ScheduleResponseDto> scheduleResponseDtoList = scheduleService.findAll();
+
+        return new ResponseEntity<>(scheduleResponseDtoList, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<List<ScheduleResponseDto>> findAllByUserId(@PathVariable Long id) {
 

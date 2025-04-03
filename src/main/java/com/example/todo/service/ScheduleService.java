@@ -31,7 +31,14 @@ public class ScheduleService {
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
-        return new ScheduleResponseDto(savedSchedule.getId(), savedSchedule.getTitle(), savedSchedule.getContents());
+        return new ScheduleResponseDto(savedSchedule.getId(), savedSchedule.getTitle(), savedSchedule.getContents(), savedSchedule.getMember().getUsername());
+    }
+
+    public List<ScheduleResponseDto> findAll() {
+
+        List<Schedule> schedules = scheduleRepository.findAll();
+
+        return schedules.stream().map(ScheduleResponseDto::toDto).collect(Collectors.toList());
     }
 
     public List<ScheduleResponseDto> findByMemberId(Long userId) {
@@ -46,7 +53,7 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findByMemberIdAndId(userId, scheduleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "일정이 없습니다."));
 
-        return new ScheduleResponseDto(schedule.getId(), schedule.getTitle(), schedule.getContents());
+        return new ScheduleResponseDto(schedule.getId(), schedule.getTitle(), schedule.getContents(), schedule.getMember().getUsername());
     }
 
     public void deleteByUserIdAndScheduleId(Long userId, Long scheduleId) {
@@ -65,4 +72,5 @@ public class ScheduleService {
 
         schedule.updateSchedule(newTitle, newContents);
     }
+
 }
