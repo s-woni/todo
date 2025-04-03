@@ -8,6 +8,7 @@ import com.example.todo.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -54,5 +55,14 @@ public class ScheduleService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "일정이 없습니다."));
 
         scheduleRepository.delete(schedule);
+    }
+
+    @Transactional
+    public void updateSchedule(Long userId, Long scheduleId, String newTitle, String newContents) {
+
+        Schedule schedule = scheduleRepository.findByMemberIdAndId(userId, scheduleId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "일정이 없습니다."));
+
+        schedule.updateSchedule(newTitle, newContents);
     }
 }

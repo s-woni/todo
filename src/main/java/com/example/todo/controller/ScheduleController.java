@@ -4,6 +4,7 @@ import com.example.todo.common.Const;
 import com.example.todo.dto.LoginResponseDto;
 import com.example.todo.dto.ScheduleRequestDto;
 import com.example.todo.dto.ScheduleResponseDto;
+import com.example.todo.dto.UpdateScheduleRequestDto;
 import com.example.todo.service.MemberService;
 import com.example.todo.service.ScheduleService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,6 +47,14 @@ public class ScheduleController {
         ScheduleResponseDto scheduleResponseDto = scheduleService.findByMemberIdAndScheduleId(userId, scheduleId);
 
         return new ResponseEntity<>(scheduleResponseDto, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{userId}/{scheduleId}")
+    public ResponseEntity<Void> updateSchedule(@PathVariable Long userId, @PathVariable Long scheduleId, @RequestBody UpdateScheduleRequestDto requestDto) {
+
+        scheduleService.updateSchedule(userId, scheduleId, requestDto.getNewTitle(), requestDto.getNewContents());
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{userId}/{scheduleId}")
