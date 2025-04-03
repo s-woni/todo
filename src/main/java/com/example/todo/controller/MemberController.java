@@ -19,7 +19,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public ResponseEntity<SignUpResponseDto> signUp(@RequestBody SignUpRequestDto requestDto) {
+    public ResponseEntity<SignUpResponseDto> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
 
         SignUpResponseDto signUpResponseDto = memberService.signUp(requestDto.getUsername(), requestDto.getPassword(), requestDto.getEmail());
 
@@ -27,7 +27,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody @Valid LoginRequestDto requestDto,
+    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto requestDto,
                                                   HttpServletRequest servletRequest) {
 
         LoginResponseDto responseDto = memberService.login(requestDto.getEmail(), requestDto.getPassword());
@@ -77,7 +77,7 @@ public class MemberController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updatePasword(@PathVariable Long id, @RequestBody UpdatePasswordRequestDto requestDto) {
+    public ResponseEntity<Void> updatePasword(@PathVariable Long id, @Valid @RequestBody UpdatePasswordRequestDto requestDto) {
 
         memberService.updatePassword(id, requestDto.getOldPassword(), requestDto.getNewPassword());
 
@@ -85,7 +85,7 @@ public class MemberController {
     }
 
     @PatchMapping("/{id}/name")
-    public ResponseEntity<Void> updateUserName(@PathVariable Long id, @RequestBody UpdateUserNameRequestDto requestDto) {
+    public ResponseEntity<Void> updateUserName(@PathVariable Long id, @Valid @RequestBody UpdateUserNameRequestDto requestDto) {
 
         memberService.updateUserName(id, requestDto.getNewName(), requestDto.getPassword());
 
@@ -93,7 +93,7 @@ public class MemberController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMember(@PathVariable Long id, @RequestBody DeleteMemberRequestDto requestDto) {
+    public ResponseEntity<Void> deleteMember(@PathVariable Long id, @Valid @RequestBody DeleteMemberRequestDto requestDto) {
 
         memberService.delete(id, requestDto.getPassword());
 

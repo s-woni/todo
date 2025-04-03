@@ -8,6 +8,7 @@ import com.example.todo.dto.UpdateScheduleRequestDto;
 import com.example.todo.service.MemberService;
 import com.example.todo.service.ScheduleService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,11 +27,11 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> save(@RequestBody ScheduleRequestDto requestDto, HttpServletRequest servletRequest) {
+    public ResponseEntity<ScheduleResponseDto> save(@Valid @RequestBody ScheduleRequestDto requestDto, HttpServletRequest servletRequest) {
 
         LoginResponseDto loggedUser = (LoginResponseDto) servletRequest.getSession(false).getAttribute(Const.LOGIN_USER);
 
-        ScheduleResponseDto scheduleResponseDto = scheduleService.save(requestDto.getTitle(), requestDto.getContents(), requestDto.getUsername(), loggedUser.getId());
+        ScheduleResponseDto scheduleResponseDto = scheduleService.save(requestDto.getTitle(), requestDto.getContents(), loggedUser.getUsername(), loggedUser.getId());
 
         return new ResponseEntity<>(scheduleResponseDto, HttpStatus.CREATED);
     }
@@ -60,7 +61,7 @@ public class ScheduleController {
     }
 
     @PatchMapping("/{userId}/{scheduleId}")
-    public ResponseEntity<Void> updateSchedule(@PathVariable Long userId, @PathVariable Long scheduleId, @RequestBody UpdateScheduleRequestDto requestDto) {
+    public ResponseEntity<Void> updateSchedule(@PathVariable Long userId, @PathVariable Long scheduleId, @Valid  @RequestBody UpdateScheduleRequestDto requestDto) {
 
         scheduleService.updateSchedule(userId, scheduleId, requestDto.getNewTitle(), requestDto.getNewContents());
 

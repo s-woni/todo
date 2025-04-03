@@ -19,8 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("{scheduleId}/comments")
 @RequiredArgsConstructor
@@ -35,7 +33,7 @@ public class CommentController {
 
         LoginResponseDto loggedUser = (LoginResponseDto) servletRequest.getSession(false).getAttribute(Const.LOGIN_USER);
 
-        CommentResponseDto commentResponseDto = commentService.save(requestDto.getComment(), requestDto.getUsername(), loggedUser.getId(), scheduleId);
+        CommentResponseDto commentResponseDto = commentService.save(requestDto.getComment(), loggedUser.getUsername(), loggedUser.getId(), scheduleId);
 
         return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
     }
@@ -49,7 +47,7 @@ public class CommentController {
     }
 
     @PatchMapping("/{commentId}")
-    public ResponseEntity<Void> updateComment(@PathVariable Long scheduleId, @PathVariable Long commentId, @RequestBody UpdateCommentRequestDto requestDto, HttpServletRequest servletRequest) {
+    public ResponseEntity<Void> updateComment(@PathVariable Long scheduleId, @PathVariable Long commentId, @Valid @RequestBody UpdateCommentRequestDto requestDto, HttpServletRequest servletRequest) {
 
         LoginResponseDto loggedUser = (LoginResponseDto) servletRequest.getSession(false).getAttribute(Const.LOGIN_USER);
 
